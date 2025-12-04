@@ -1,0 +1,26 @@
+{
+  "package": {
+    "productName": "FileOrganizer",
+    "version": "0.1.0"
+  },
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "tauri": {
+    "allowlist": {
+      "shell": {
+        "all": false,
+        "open": "strict"
+      }
+    },
+    "windows": [
+      {
+        "title": "File Organizer",
+        "width": 1024,
+        "height": 768
+      }
+    ]
+  }
+}
