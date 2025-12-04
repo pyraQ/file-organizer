@@ -28,6 +28,7 @@ This repository implements a FastAPI backend, LangGraph-enabled ingestion pipeli
    npm run dev
    ```
 3. Tauri desktop shell is configured in `app/src-tauri/tauri.conf.json` and can be started with `npm run tauri`.
+4. Use Node 18+ with ESM support; the frontend package is configured as a native ES module via `"type": "module"` to avoid plugin loading errors.
 
 ## Tests
 Backend tests are available via `pytest` in `server/tests`.
