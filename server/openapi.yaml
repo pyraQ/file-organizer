@@ -1,0 +1,149 @@
+openapi: 3.0.3
+info:
+  title: File Organizer API
+  version: 0.1.0
+paths:
+  /health:
+    get:
+      summary: Healthcheck
+      responses:
+        '200':
+          description: Service status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /config:
+    get:
+      summary: Configuration details
+      responses:
+        '200':
+          description: Application configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigResponse'
+  /ingest/files:
+    post:
+      summary: Ingest a file from disk
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IngestionRequest'
+      responses:
+        '200':
+          description: Ingestion queued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionResponse'
+        '404':
+          description: File not found
+  /queue:
+    get:
+      summary: Current ingestion queue
+      responses:
+        '200':
+          description: Queue entries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueResponse'
+  /search:
+    post:
+      summary: Semantic search across ingested files
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: Ranked results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+    ConfigResponse:
+      type: object
+      properties:
+        app_name:
+          type: string
+        version:
+          type: string
+        environment:
+          type: string
+        storage_dir:
+          type: string
+        supported_parsers:
+          type: array
+          items:
+            type: string
+    IngestionRequest:
+      type: object
+      required: [path]
+      properties:
+        path:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+    IngestionResponse:
+      type: object
+      properties:
+        job_id:
+          type: string
+        status:
+          type: string
+    QueueItem:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        path:
+          type: string
+    QueueResponse:
+      type: object
+      properties:
+        queue:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueueItem'
+    SearchRequest:
+      type: object
+      required: [query]
+      properties:
+        query:
+          type: string
+        limit:
+          type: integer
+          default: 5
+    SearchHit:
+      type: object
+      properties:
+        job_id:
+          type: string
+        score:
+          type: number
+        metadata:
+          type: object
+    SearchResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchHit'
